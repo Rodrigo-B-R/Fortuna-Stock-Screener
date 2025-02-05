@@ -1,0 +1,438 @@
+
+{% extends 'stock_lookup/base_template.html' %}
+
+{% load static %}
+
+
+
+{%block head%}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Overview</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet" href="{% static 'stock_lookup/css/styles.css' %}">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+
+
+{%endblock%}
+
+    
+{% block content %}
+
+
+
+
+
+    
+    <div class="introduction ">
+
+        <div class="introduction_image">
+            <img src="{{image.image}}" alt="{{image.name}}">
+        </div>
+        
+
+        <div class="introduction_text">
+            <p> {{overview_data.Name}}</p>
+            <p> {{image.ticker}} | {{overview_data.Exchange}}</p>
+            <p> {{overview_data.Country}} | {{overview_data.Currency}}</p>
+        </div>
+        
+       
+    </div>
+    
+
+
+        </script>
+      </div>
+
+    <div class="overview">
+        <div class="overview_text">
+            <p class="centered_text"><b>Value</b></p>
+            <p> Market Cap: {{overview_data.MarketCapitalization}}</p>
+            <p> PE: {{overview_data.PERatio}} </p>
+            <p> Price to Sales: {{overview_data.PriceToSalesRatioTTM}} </p>
+            <p> EV to EBITDA: {{overview_data.EVToEBITDA}} </p>
+            <p> Price to Book: {{overview_data.PriceToBookRatio}} </p>
+        
+
+        </div>
+
+        <div class="overview_text">
+            <p class="centered_text"><b>Margins & Growth</b></p>
+            <p> Profti Margin: {{overview_data.ProfitMargin}}</p>
+            <p> Operating Margin (TTM): {{overview_data.OperatingMarginTTM}} </p>
+            <p> Quarterly Earnings (YoY): %{{overview_data.QuarterlyEarningsGrowthYOY}} </p>
+            <p> Quarterly Revenue (YoY): %{{overview_data.QuarterlyRevenueGrowthYOY}} </p>
+            
+        </div>
+
+        <div 
+            class="overview_text"> <p class="centered_text"><b>Analyst Ratings</b></p>
+            <p>Target Price: ${{overview_data.AnalystTargetPrice}}</p>
+            <p>Strong Buy: {{overview_data.AnalystRatingStrongBuy}}</p>
+            <p>Buy: {{overview_data.AnalystRatingBuy}}</p>
+            <p>Hold: {{overview_data.AnalystRatingHold}}</p>
+            <p>Sell: {{overview_data.AnalystRatingSell}}</p>
+            <p>Strong Sell: {{overview_data.AnalystRatingStrongSell}}</p>
+        
+        </div>
+
+
+    </div>
+
+    <div class="change_charts">
+        <button id="annual_button"> Annual </button>
+        <button id="quarter_button"> Quarter </button>
+    </div>
+
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <canvas id="modalChart" width="800" height="400"> </canvas>
+        </div>
+    </div>
+    
+    
+
+    
+
+
+
+
+    <div class="chart_grid">
+        <div class="chart"> <canvas id='FCF_Chart'>  </canvas> <button class="open-chart" data-chart-id="FCF_Chart"> Open </button> </div>
+
+        <div class= 'chart'> <canvas id= 'EPS_Chart' ></canvas> <button class="open-chart" data-chart-id="EPS_Chart"> Open </button></div>
+    
+        <div class="chart"> <canvas id= 'Revenue_Chart' ></canvas> <button class="open-chart" data-chart-id="Revenue_Chart"> Open </button></div>
+
+        <div class="chart"> <canvas id= 'Net_Income_Chart' ></canvas> <button class="open-chart" data-chart-id="Net_Income_Chart"> Open </button></div>
+
+        <div class="chart"> <canvas id= 'Ebitda_Chart' ></canvas> <button class="open-chart" data-chart-id="Ebitda_Chart"> Open </button></div>
+
+        <div class="chart"> <canvas id= 'Expenses_Chart' ></canvas> <button class="open-chart" data-chart-id="Expenses_Chart"> Open </button></div>
+
+        <div class="chart"> <canvas id= 'Dividends_Chart' ></canvas> <button class="open-chart" data-chart-id="Dividends_Chart"> Open </button></div>
+    </div>
+
+
+    
+            <script>    
+
+                
+                
+                Chart.defaults.font.family = 'Open Sans';  
+                Chart.defaults.font.size = 18;            
+                Chart.defaults.font.color = 'black'; 
+
+                const shared_options = { 
+                    responsive: true, 
+                    maintainAspectRatio: true,
+                    scales: {
+                            y: { 
+                                ticks: { 
+                                    beginAtZero: true, 
+                                    callback: function(value) {
+                                        if (value >= 1e9 || value <= -1e9) {
+                                            return '$' + (value / 1e9) + 'b'; // Billion
+                                        } else if (value >= 1e6 || value <= -1e6) {
+                                            return '$' + (value / 1e6) + 'm'; // Million
+                                        } else if (value >= 1e3 || value <= -1e3) {
+                                            return '$' + (value / 1e3) + 'k'; // Thousand
+                                        } else {
+                                            return '$' + value.toFixed(2); // Return the original value if no abbreviation
+                                        }           
+                                        }
+                                    },
+                                
+                                },
+                            x: { grid: { display: false }
+            
+                                }
+                            }
+                    };
+
+                const modal_options = { 
+                    responsive: true, 
+                    maintainAspectRatio: true,
+                    scales: {
+                            y: { 
+                                ticks: { 
+                                    beginAtZero: true, 
+                                    callback: function(value) {
+                                        if (value >= 1e9 || value <= -1e9) {
+                                            return '$' + (value / 1e9) + 'b'; // Billion
+                                        } else if (value >= 1e6 || value <= -1e6) {
+                                            return '$' + (value / 1e6) + 'm'; // Million
+                                        } else if (value >= 1e3 || value <= -1e3) {
+                                            return '$' + (value / 1e3) + 'k'; // Thousand
+                                        } else {
+                                            return '$' + value.toFixed(2); // Return the original value if no abbreviation
+                                        }           
+                                        }
+                                    },
+                                
+                                },
+                            x: { grid: { display: false }, 
+            
+                                }
+                            }
+                    };
+
+                
+
+
+                
+                const fcf_chartData= JSON.parse('{{ cashflow_chart|escapejs }} ') 
+                const fcf_labels= fcf_chartData.labels
+                const fcf_data= fcf_chartData.free_cashflow
+                const dividends= fcf_chartData.dividends
+                
+                const eps_chartData= JSON.parse('{{ eps_chart|escapejs }}')
+                const eps_labels= eps_chartData.labels
+                const eps_data= eps_chartData.eps
+                
+
+            
+                const incomestatement_chartData = JSON.parse('{{ incomestatement_chart|escapejs }}')
+                const  is_labels= incomestatement_chartData.labels
+                const revenue= incomestatement_chartData.revenue
+                const net_income= incomestatement_chartData.net_income
+                const ebitda= incomestatement_chartData.ebitda
+                const expenses= incomestatement_chartData.expenses
+
+
+
+                const cashflow_chart_quarter= JSON.parse('{{ cashflow_chart_quarter|escapejs }}')
+                const fcf_labels_quarter= cashflow_chart_quarter.labels
+                const fcf_data_quarter= cashflow_chart_quarter.free_cashflow
+                const dividends_quarter= cashflow_chart_quarter.dividends
+
+                const eps_chart_quarter= JSON.parse('{{ eps_chart_quarter|escapejs }}')
+                const eps_labels_quarter= eps_chart_quarter.labels
+                const eps_data_quarter= eps_chart_quarter.earnings
+
+                const incomestatement_chart_quarter = JSON.parse('{{ incomestatement_chart_quarter|escapejs }}')
+                const  is_labels_quarter= incomestatement_chart_quarter.labels
+                const revenue_quarter= incomestatement_chart_quarter.revenue
+                const net_income_quarter= incomestatement_chart_quarter.net_income
+                const ebitda_quarter= incomestatement_chart_quarter.ebitda
+                const expenses_quarter= incomestatement_chart_quarter.expenses
+
+
+
+
+
+
+                
+
+                
+
+                function create_chart(canvasId, labels, data, chartLabel, color){
+
+                    const ctx= document.getElementById(canvasId).getContext('2d');
+
+                    new Chart(ctx,
+                    {type: 'bar',
+                    
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: chartLabel,
+                            data: data,
+                            backgroundColor: color,
+                            hoverBorder: 3,
+                            hoverColor: color
+                            }]
+                                         },
+                    options: shared_options
+                    
+                       }
+                )
+                        
+                    }
+
+
+                create_chart('FCF_Chart', fcf_labels, fcf_data ,'Free Cash Flow (USD)', 'rgba(242, 121, 53, 1)'
+                )
+                create_chart('EPS_Chart',eps_labels,eps_data, 'EPS (USD)', 'rgba(255, 240, 0, 1)'  )
+
+                create_chart('Revenue_Chart', is_labels, revenue, 'Revenue (USD)', 'rgba(255,179,67, 1)' )
+
+                create_chart('Net_Income_Chart', is_labels, net_income, 'Net Income (USD)', 'rgba(102,241,194, 1)' )
+
+                create_chart('Ebitda_Chart', is_labels, ebitda, 'EBITDA', 'rgba(144,213,255, 1)' )
+
+                create_chart('Expenses_Chart', is_labels, expenses, 'Expenses (USD)', 'rgba(248, 131, 121, 1)' )
+                
+                create_chart('Dividends_Chart', fcf_labels, dividends, 'Dividends (USD)', 'rgba(200, 247, 197, 1)' )
+                
+                
+
+                document.addEventListener('DOMContentLoaded', ()=> {
+                    const buttons =document.querySelectorAll('.open-chart');
+                    const modal= document.getElementById('chartModal');
+                    const modalChartCanvas= document.getElementById('modalChart');
+                    const closeModal=document.querySelector('.close');
+                    
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                        }
+
+                    window.modalChart= null;
+                    
+
+                    buttons.forEach((button) => { 
+                        button.addEventListener('click', function(){ 
+                            
+                            const chartID=  this.getAttribute('data-chart-id');
+                            const originalChart= Chart.getChart(chartID);
+                            
+
+                        
+                            if (!originalChart) {
+                                console.error(`Chart with ID ${chartID} not found.`);
+                                return;
+                            }
+
+
+                            
+
+                            if (modalChart){
+                                                window.modalChart.destroy();
+                                                window.modalChart = null;
+                                            }
+                            
+
+                            // console.log("Cloned Chart Data:", chartData);
+                            // console.log("Cloned Chart Options:", chartOptions);
+
+                            // console.log("Original Chart Options:", originalChart.options);
+                            // console.log("Original Chart Data:", originalChart.data);
+
+                            const chartData = originalChart.data;
+
+                            console.log("Chart Data:", chartData);
+                            console.log("Chart Options:", shared_options)
+
+                            console.log("Canvas width:", modalChartCanvas.width);
+                            console.log("Canvas height:", modalChartCanvas.height);
+
+                            
+
+                            
+                            modal.style.display= 'block';
+                            
+                            const modalCtx = modalChartCanvas.getContext("2d");
+                            modalCtx.clearRect(0, 0, modalChartCanvas.width, modalChartCanvas.height);
+                            
+                            
+
+                            try {
+                                modalChart = new Chart(modalCtx, {
+                                type: originalChart.config.type, // Use the same chart type
+                                data: chartData, // Cloned chart data
+                                options: modal_options, // Cloned chart options
+                            });
+                            console.log("Modal chart created successfully.");
+                            modalChart.update();
+                            } catch (error) {
+                                console.error("Error creating modal chart:", error);
+                            }
+                            
+
+
+                        });
+                    });
+
+                    closeModal.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                        
+                        
+                        
+
+
+                    });
+                    window.addEventListener('click', (e) => {
+
+                        if (e.target === modal) {
+                            modal.style.display = 'none';}
+                        
+                        
+                        
+                        });
+
+                });
+
+            function updateChart(chartID, labels, data ){
+                const chart = Chart.getChart(chartID); // Get the existing chart by ID
+                if (!chart) {
+                                console.error(`Chart with ID ${chartID} not found.`);
+                                return;
+                            }
+                chart.data.labels = labels; // Update the labels
+                chart.data.datasets[0].data = data; // Update the dataset
+                chart.update(); // Redraw the chart
+
+
+            }
+            const annual_chart_button= document.getElementById('annual_button')
+            const quarter_chart_button= document.getElementById('quarter_button')
+
+            quarter_chart_button.addEventListener('click', function(){
+                quarter_chart_button.classList.add('active');
+                annual_chart_button.classList.remove('active');
+
+                updateChart('FCF_Chart', fcf_labels_quarter, fcf_data_quarter);
+                updateChart('Dividends_Chart', fcf_labels_quarter, dividends_quarter)
+                updateChart('EPS_Chart', eps_labels_quarter, eps_data_quarter);
+                updateChart('Revenue_Chart', is_labels_quarter, revenue_quarter)
+                updateChart('Net_Income_Chart', is_labels_quarter,net_income_quarter)
+                updateChart('Ebitda_Chart', is_labels_quarter,ebitda_quarter)
+                updateChart('Expenses_Chart', is_labels_quarter, expenses_quarter)
+
+                
+            });
+            annual_chart_button.classList.add('active');
+            
+            annual_chart_button.addEventListener('click', function(){
+                annual_chart_button.classList.add('active');
+                quarter_chart_button.classList.remove('active');
+
+                updateChart('FCF_Chart', fcf_labels, fcf_data);
+                updateChart('Dividends_Chart', fcf_labels, dividends)
+                updateChart('EPS_Chart', eps_labels, eps_data);
+                updateChart('Revenue_Chart', is_labels, revenue)
+                updateChart('Net_Income_Chart', is_labels,net_income)
+                updateChart('Ebitda_Chart', is_labels,ebitda)
+                updateChart('Expenses_Chart', is_labels, expenses)
+
+
+            });
+
+            
+
+
+
+
+            </script>
+
+
+            
+        
+    
+        
+    
+{% endblock %}
+
+
+
+
+
+

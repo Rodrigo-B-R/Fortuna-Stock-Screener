@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+
+
+<html lang="en">
+<head>
+
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'stock_lookup/css/styles.css' %}">
+    
+
+   
+
+  
+
+    {% endblock %}
+    
+</head>
+
+<body>
+    <header> 
+        <a href="{% url 'home' %}"> FORTUNA </a> 
+        
+    
+    
+    </header>
+    
+   
+
+
+
+<div class="search_bar">
+    
+    <H1><b>Search by ticker</b></H1>
+    
+    <form method="get" action="{% url 'stock_view' %}">
+        <input id="search" name="ticker" type="search" placeholder="Company Ticker" autofocus required />
+        <button type="submit"> <img class = 'search_button' src="{% static 'stock_lookup/images/search-analysis.png'%}" alt="search_button"></button>
+    </form>
+</div>
+
+
+
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>
+
+
+
+

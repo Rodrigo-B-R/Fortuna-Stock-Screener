@@ -1,0 +1,201 @@
+
+
+.chart_grid { 
+  display:grid;
+  grid-template-columns: repeat(auto-fit ,minmax(500px, 1fr));
+  gap: 30px;
+  justify-content: center ;
+  margin: 0 auto ;
+  margin-top: 60px;
+
+  
+
+
+
+}
+
+.chart{
+  width: 100%;
+  margin: 0 auto ;
+  
+
+
+}
+
+canvas{ 
+  width: 100%;
+  
+  height: auto;
+  padding: 10px;
+}
+
+
+
+.overview{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 40px;
+
+}
+
+.overview_text{
+    width: 250px;
+    height: 200px;                          
+               
+}
+
+.introduction {
+  display: flex;
+  gap: 5px ;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  justify-content: center;
+  align-items: center;
+  
+    
+}
+.introduction_image{
+    width: 200px;
+    height: auto;
+    
+    
+
+  
+
+}
+
+.introduction_text{
+    width: 200px;
+    height: 150px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+
+}
+.change_charts{
+  justify-content: center;
+  margin: 30px;
+}
+
+img{ 
+  max-width: 100% ;
+  height: auto;
+  
+
+}
+
+.centered_text{
+  text-align: center;
+}
+
+.search_bar{
+  display: flex;
+  color: purple;
+  flex-direction: column; 
+  gap: 20px;      
+  justify-content: center;
+  width: 30%;
+  margin: 0 auto;
+  align-items: center;
+  text-align: center;
+  height: 200px;
+  
+  border-radius: 60px;
+  
+}
+
+input[type='search']{
+  border-radius: 0.4rem;
+  width: 80%;
+  height: auto;
+
+}
+
+
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8); /* Black with opacity */ /* Enable flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; 
+}
+
+.modal-content {
+  position: fixed;
+  margin: auto;
+  padding: 20px;
+  background: white;
+  width: 100%;
+  max-width: 1200px;
+  border-radius: 10px; /* Rounded corners for aesthetics */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+
+#modalChart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.search_button{
+  width: 15px;
+  height: 15px;
+  
+ 
+}
+
+header{
+  color: purple;
+}
+
+button.active {
+  background-color: purple;
+  color: white;
+}
+
+.change_charts{
+  display:flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  margin-top: 60px;
+  
+}
+
+.open-chart {
+  background-color: purple;
+  color: white;
+}
+
+.tradingview-widget-container{
+  justify-content: center;
+}
+
+
+
+
