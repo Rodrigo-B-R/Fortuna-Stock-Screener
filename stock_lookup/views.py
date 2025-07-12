@@ -160,13 +160,6 @@ def incomestatement_to_chart(incomestatement):
     return incomestatement_chart, incomestatement_chart_quarter
 
 
-
-    
-   
-
-
-
-
 def home(request):
 
     return render(request,'stock_lookup/home.html')
@@ -199,5 +192,8 @@ def stock_view(request):
                           )
     
 
+def error_view(request):
+
+    return render(request,'stock_lookup/error.html')
 
 

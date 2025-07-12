@@ -1,13 +1,21 @@
 import requests
+from django.shortcuts import redirect
+from django.conf import settings 
 
 
-stock_info_key= 'S3TLXSQ7JZXX0F4Z' #https://www.alphavantage.co/
-stock_images_key= 'Wmx2eCtCpSi2OFVVGEvq/w==59m4O4LX9tv2uXs5' #https://api-ninjas.com/api/animals
 
+
+stock_info_key= settings.STOCK_INFO_KEY #https://www.alphavantage.co/
+stock_images_key= settings.STOCK_IMAGES_KEY #https://api-ninjas.com/api/animals
 
 def get_overview(ticker):
+
+   
     overview_url = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={stock_info_key}'
-    overview_response = requests.get(overview_url)
+    
+   
+    overview_response=make_api_call(overview_url)
+        
     overview_data = overview_response.json()
 
     
@@ -16,7 +24,8 @@ def get_overview(ticker):
 
 def get_cashflow(ticker):
     cashflow_url = f'https://www.alphavantage.co/query?function=CASH_FLOW&symbol={ticker}&apikey={stock_info_key}'
-    cashflow_response = requests.get(cashflow_url)
+    cashflow_response = make_api_call(cashflow_url)
+
     cashflow_data = cashflow_response.json()
     
 
@@ -33,13 +42,22 @@ def get_image(ticker):
 
 def get_eps(ticker):
     url= f'https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={stock_info_key}'
-    response = requests.get(url)
+    response = make_api_call(url)
     eps = response.json()
 
     return eps
 
 def get_incomestatement(ticker):
     url=f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={ticker}&apikey={stock_info_key}'
-    response=requests.get(url)
+    response=make_api_call(url)
     incomestatement=response.json()
     return incomestatement
+
+
+
+def make_api_call(url):
+    try:
+        response = requests.get(url)
+    except requests.exceptions.HTTPError:
+        return redirect('error')
+    return response
