@@ -26,9 +26,9 @@ STOCK_IMAGES_KEY= config('STOCK_IMAGES_KEY')
 STOCK_INFO_KEY = config('STOCK_INFO_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rodrigobetancourt.pythonanywhere.com']
 
 
 # Application definition
