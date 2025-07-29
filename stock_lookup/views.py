@@ -7,8 +7,8 @@ import json
 # Create your views here.
 
 
-stock_info_key= 'S3TLXSQ7JZXX0F4Z' #https://www.alphavantage.co/
-stock_images_key= 'Wmx2eCtCpSi2OFVVGEvq/w==59m4O4LX9tv2uXs5' #https://api-ninjas.com/api/animals
+# stock_info_key= 'S3TLXSQ7JZXX0F4Z' #https://www.alphavantage.co/
+# stock_images_key= 'Wmx2eCtCpSi2OFVVGEvq/w==59m4O4LX9tv2uXs5' #https://api-ninjas.com/api/animals
 
 def cashflow_to_chart(cashflow_data):
     annual_reports= cashflow_data['annualReports']

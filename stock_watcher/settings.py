@@ -26,9 +26,9 @@ STOCK_IMAGES_KEY= config('STOCK_IMAGES_KEY')
 STOCK_INFO_KEY = config('STOCK_INFO_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool, default=False)
+DEBUG = config('DEBUG', cast=bool, default=True)
 
-ALLOWED_HOSTS = ['rodrigobetancourt.pythonanywhere.com']
+ALLOWED_HOSTS = ['fortuna-stock-screener.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
