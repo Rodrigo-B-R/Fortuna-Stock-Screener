@@ -12,6 +12,15 @@ stock_info_key= settings.STOCK_INFO_KEY #https://www.alphavantage.co/
 stock_images_key= settings.STOCK_IMAGES_KEY #https://api-ninjas.com/api/animals
 
 
+def make_api_call_local(url):
+    url=url+f'&apikey={stock_info_key}'
+    response= requests.get(url)
+    data=response.json()
+
+    return data
+
+
+
 def get_overview(ticker):
 
 
@@ -67,6 +76,6 @@ def get_incomestatement(ticker):
 
 
 def make_api_call(url):
-    data= make_api_call_via_proxy(url)
+    data= make_api_call_local(url)
     return data
 
