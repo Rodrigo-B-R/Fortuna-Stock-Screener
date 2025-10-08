@@ -2,7 +2,7 @@ Simple Stock screener i built based on Qualtrim stock screener:
 https://www.qualtrim.com/ 
 
 Requirements: 
-.env file format:
+.env file containing
 
 STOCK_INFO_KEY= Alpha Vantage Api Key
 
