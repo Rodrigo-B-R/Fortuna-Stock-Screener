@@ -1,6 +1,12 @@
 Simple Stock screener i built based on Qualtrim stock screener:
 https://www.qualtrim.com/ 
 
+Requirements: 
+.env file format
+STOCK_INFO_KEY= Alpha Vantage Api Key
+STOCK_IMAGES_KEY= Api Ninjas key
+SECRET_KEY = Django secret key
+DEBUG=True/False
 
 Ilustrative pictures:
 <img width="1905" height="985" alt="image" src="https://github.com/user-attachments/assets/153ecb0b-0801-412c-a921-9e6770f63a25" />
